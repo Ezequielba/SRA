@@ -1,10 +1,10 @@
-package br.com.photobreak.SisPhotobreak;
+package br.com.vivo.SisSRA;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SisPhotobreakApplicationTests {
+class SisSRAApplicationTests {
 
 	@Test
 	void contextLoads() {

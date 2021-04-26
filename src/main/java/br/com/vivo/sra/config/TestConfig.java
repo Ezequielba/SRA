@@ -64,6 +64,6 @@ public class TestConfig implements CommandLineRunner {
 		processoRepository.saveAll(Arrays.asList(p2));
 		//processoRepository.saveAll(Arrays.asList(p3));
 		acessoRepository.saveAll(Arrays.asList(a1));
-		
+				
 	}
 }

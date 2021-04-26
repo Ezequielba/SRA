@@ -8,13 +8,13 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.3.1.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
-		<!-- <relativePath>Sistema-Photobreak-V2/pom.xml</relativePath> -->
+		<!-- <relativePath>SRA/pom.xml</relativePath> -->
 	</parent>
 	<groupId>br.com.vivo.sra</groupId>
-	<artifactId>SisPhotobreak</artifactId>
+	<artifactId>SisSRA</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SRAVIVO</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Sistema Restart Automatico</description>
 
 	<properties>
 		<java.version>1.8</java.version>
