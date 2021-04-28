@@ -29,15 +29,13 @@ public class Acesso implements Serializable{
 	@JoinColumn(name = "sistema_id")
 	private Sistema sistema;
 	
-	@ManyToOne
-	@JoinColumn(name = "processo_id")
-	private Processo processo;
+	
 	
 	public Acesso() {
 	}
 
 	public Acesso(Long id, String hostname, String ip, String usuario, String senha, String diretorio, String stop, 
-			String start, Sistema sistema, Processo processo) {
+			String start, Sistema sistema) {
 		super();
 		this.id = id;
 		this.hostname = hostname;
@@ -48,7 +46,6 @@ public class Acesso implements Serializable{
 		this.stop = stop;
 		this.start = start;
 		this.sistema = sistema;
-		this.processo = processo;
 	}
 
 	public Long getId() {
@@ -117,10 +114,6 @@ public class Acesso implements Serializable{
 
 	public Sistema getSistema() {
 		return sistema;
-	}
-
-	public Processo getProcesso() {
-		return processo;
 	}
 
 	@Override

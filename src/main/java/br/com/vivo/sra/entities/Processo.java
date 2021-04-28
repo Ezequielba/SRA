@@ -26,16 +26,21 @@ public class Processo implements Serializable{
 	@JoinColumn(name = "sistema_id")
 	private Sistema sistema;
 	
+	@ManyToOne
+	@JoinColumn(name = "acesso_id")
+	private Acesso acesso;
+	
 	public Processo() {
 	}
 	
-	public Processo(Long id, String nome, Boolean statusProcesso, Instant dataProcesso, Sistema sistema) {
+	public Processo(Long id, String nome, Boolean statusProcesso, Instant dataProcesso, Sistema sistema, Acesso acesso) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.statusProcesso = statusProcesso;
 		this.dataProcesso = dataProcesso;
 		this.sistema = sistema;
+		this.acesso = acesso;
 	}
 
 	public Long getId() {
@@ -72,6 +77,10 @@ public class Processo implements Serializable{
 
 	public Sistema getSistema() {
 		return sistema;
+	}
+	
+	public Acesso getAcesso() {
+		return acesso;
 	}
 
 	@Override

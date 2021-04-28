@@ -51,19 +51,17 @@ public class TestConfig implements CommandLineRunner {
 		Sistema s2 = new Sistema(null, "Sistema_02", false, agoraFormatado, u2);
 		//Sistema s3 = new Sistema(null, "EOC", false, agoraFormatado, u2);
 		
-			
-		Processo p1 = new Processo(null, "Processo_01", true, Instant.parse("2020-08-18T18:00:00Z"), s1);
-		Processo p2 = new Processo(null, "Processo_02", true, Instant.parse("2020-08-18T18:00:00Z"), s2);
+		Acesso a1 = new Acesso(null, "HOST_01", "192.168.0.1", "usuario_host", "123", "/home/teste", "stop.sh", "start.sh", s1);
+
+		Processo p1 = new Processo(null, "Processo_01", true, Instant.parse("2020-08-18T18:00:00Z"), s1, a1);
+		Processo p2 = new Processo(null, "Processo_02", true, Instant.parse("2020-08-18T18:00:00Z"), s2, a1);
 		//Processo p3 = new Processo(null, "TSERVER", "INATIVO", Instant.parse("2020-08-18T18:00:00Z"), s3);
-		
-		Acesso a1 = new Acesso(null, "HOST_01", "192.168.0.1", "usuario_host", "123", "/home/teste", "stop.sh", "start.sh", s1, p1);
 		
 		usuarioRepository.saveAll(Arrays.asList(u1, u2));
 		sistemaRepository.saveAll(Arrays.asList(s1, s2));
+		acessoRepository.saveAll(Arrays.asList(a1));
 		processoRepository.saveAll(Arrays.asList(p1));
 		processoRepository.saveAll(Arrays.asList(p2));
-		//processoRepository.saveAll(Arrays.asList(p3));
-		acessoRepository.saveAll(Arrays.asList(a1));
 				
 	}
 }
