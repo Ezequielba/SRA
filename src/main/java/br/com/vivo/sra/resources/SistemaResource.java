@@ -19,7 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.vivo.sra.entities.Sistema;
 import br.com.vivo.sra.services.SistemaService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value = "/sistemas")
 public class SistemaResource {
@@ -27,18 +27,21 @@ public class SistemaResource {
 	@Autowired
 	private SistemaService service;
 	
+	@CrossOrigin
 	@GetMapping
 	public ResponseEntity<List<Sistema>> findAll() {
 		List<Sistema> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@CrossOrigin
 	@GetMapping(value="/{id}")
 	public ResponseEntity<Sistema> findById(@PathVariable Long id){
 		Sistema obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<Sistema> insert(@RequestBody Sistema obj){
 		obj = service.insert(obj);
@@ -46,6 +49,7 @@ public class SistemaResource {
 		return ResponseEntity.created(uri).body(obj);
 	}
 	
+	@CrossOrigin
 	@DeleteMapping(value="/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
 		service.delete(id);

@@ -19,7 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.vivo.sra.entities.Acesso;
 import br.com.vivo.sra.services.AcessoService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value = "/acessos")
 public class AcessoResource {
@@ -27,18 +27,21 @@ public class AcessoResource {
 	@Autowired
 	private AcessoService service;
 	
+	@CrossOrigin
 	@GetMapping
 	public ResponseEntity<List<Acesso>> findAll() {
 		List<Acesso> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@CrossOrigin
 	@GetMapping(value="/{id}")
 	public ResponseEntity<Acesso> findById(@PathVariable Long id){
 		Acesso obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<Acesso> insert(@RequestBody Acesso obj){
 		obj = service.insert(obj);
@@ -46,12 +49,14 @@ public class AcessoResource {
 		return ResponseEntity.created(uri).body(obj);
 	}
 	
+	@CrossOrigin
 	@DeleteMapping(value="/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CrossOrigin
 	@PutMapping(value="/{id}")
 	public ResponseEntity<Acesso> update(@PathVariable Long id, @RequestBody Acesso obj){
 		obj = service.update(id, obj);

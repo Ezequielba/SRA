@@ -19,7 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.vivo.sra.entities.Processo;
 import br.com.vivo.sra.services.ProcessoService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value = "/processos")
 public class ProcessoResource {
@@ -27,18 +27,21 @@ public class ProcessoResource {
 	@Autowired
 	private ProcessoService service;
 	
+	@CrossOrigin
 	@GetMapping
 	public ResponseEntity<List<Processo>> findAll() {
 		List<Processo> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@CrossOrigin
 	@GetMapping(value="/{id}")
 	public ResponseEntity<Processo> findById(@PathVariable Long id){
 		Processo obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<Processo> insert(@RequestBody Processo obj){
 		obj = service.insert(obj);
@@ -46,6 +49,7 @@ public class ProcessoResource {
 		return ResponseEntity.created(uri).body(obj);
 	}
 	
+	@CrossOrigin
 	@DeleteMapping(value="/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
 		service.delete(id);
