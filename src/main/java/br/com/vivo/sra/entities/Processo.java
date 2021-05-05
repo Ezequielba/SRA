@@ -23,11 +23,11 @@ public class Processo implements Serializable{
 	private Instant dataProcesso;
 	
 	@ManyToOne
-	@JoinColumn(name = "sistema_id")
+	@JoinColumn(name = "sistema_id", referencedColumnName="id")
 	private Sistema sistema;
 	
 	@ManyToOne
-	@JoinColumn(name = "acesso_id")
+	@JoinColumn(name = "acesso_id", referencedColumnName="id")
 	private Acesso acesso;
 	
 	public Processo() {
