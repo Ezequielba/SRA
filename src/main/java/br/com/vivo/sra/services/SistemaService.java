@@ -40,6 +40,7 @@ public class SistemaService {
 
 	private void updateData(Sistema entity, Sistema obj) {
 		entity.setNome(obj.getNome());
+		entity.setdataAtualizacao(obj.getdataAtualizacao());
 		entity.setstatusSistema(obj.getstatusSistema());
 	}
 }

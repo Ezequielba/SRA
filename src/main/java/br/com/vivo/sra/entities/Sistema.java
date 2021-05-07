@@ -1,6 +1,7 @@
 package br.com.vivo.sra.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Sistema implements Serializable{
 	private Long id;
 	private String nome;
 	private Boolean statusSistema;
-	private String dataAtualizacao;
+	private Instant dataAtualizacao;
 	
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
@@ -34,7 +35,7 @@ public class Sistema implements Serializable{
 	public Sistema() {
 	}
 
-	public Sistema(Long id, String nome, Boolean statusSistema, String dataAtualizacao, Usuario usuario) {
+	public Sistema(Long id, String nome, Boolean statusSistema, Instant dataAtualizacao, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -67,11 +68,11 @@ public class Sistema implements Serializable{
 		this.statusSistema = statusSistema;
 	}
 
-	public String getdataAtualizacao() {
+	public Instant getdataAtualizacao() {
 		return dataAtualizacao;
 	}
 
-	public void setdataAtualizacao(String dataAtualizacao) {
+	public void setdataAtualizacao(Instant dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 	

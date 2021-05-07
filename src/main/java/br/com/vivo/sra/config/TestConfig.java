@@ -1,8 +1,6 @@
 package br.com.vivo.sra.config;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,16 +37,17 @@ public class TestConfig implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		
 		/* Script para formatar a data */
+		/*
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		LocalDateTime agora = LocalDateTime.now();
 		String agoraFormatado = agora.format(formatter);
-		
+		*/
 		Usuario u1 = new Usuario(null, "Usuario_01", "123", true);
 		Usuario u2 = new Usuario(null, "Usuario_02", "456", false);
 		
-		Sistema s1 = new Sistema(null, "Sistema_01", false, agoraFormatado, u1);
-		Sistema s2 = new Sistema(null, "Sistema_02", false, agoraFormatado, u2);
+		Sistema s1 = new Sistema(null, "Sistema_01", false, Instant.parse("2020-08-18T18:00:00Z"), u1);
+		Sistema s2 = new Sistema(null, "Sistema_02", false, Instant.parse("2020-08-18T18:00:00Z"), u2);
 		//Sistema s3 = new Sistema(null, "EOC", false, agoraFormatado, u2);
 		
 		Acesso a1 = new Acesso(null, "HOST_01", "192.168.0.1", "usuario_host", "123", "/home/teste", "stop.sh", "start.sh", s1);
