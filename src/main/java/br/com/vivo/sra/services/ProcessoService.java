@@ -7,12 +7,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.com.vivo.sra.entities.Processo;
-import br.com.vivo.sra.entities.Sistema;
 import br.com.vivo.sra.repositories.ProcessoRepository;
+
 
 @Service
 public class ProcessoService {
@@ -23,9 +25,11 @@ public class ProcessoService {
 	@PersistenceContext
     private EntityManager entityManager;
 	
+	
 	public List<Processo> findAll(){
-		return repository.findAll();
+		return repository.findAll((Sort.by("sistema_id")));
 	}
+	
 
 	public List<Processo> findBySistemaID(Long sistemaID){
 		Query query = entityManager.createQuery("SELECT p FROM Processo p Where SISTEMA_ID ="+sistemaID);
@@ -53,7 +57,11 @@ public class ProcessoService {
 
 	private void updateData(Processo entity, Processo obj) {
 		entity.setNome(obj.getNome());
+		entity.setDataProcesso(obj.getDataProcesso());
+		entity.setStatusMonitoracao(obj.getStatusMonitoracao());
 		entity.setStatusProcesso(obj.getStatusProcesso());
+		entity.setAcesso(obj.getAcesso());
+		entity.setSistema(obj.getSistema());
 	}
 	
 }

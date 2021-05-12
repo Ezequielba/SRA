@@ -19,6 +19,7 @@ public class Processo implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
+	private Boolean statusMonitoracao;
 	private Boolean statusProcesso;
 	private Instant dataProcesso;
 	
@@ -33,10 +34,11 @@ public class Processo implements Serializable{
 	public Processo() {
 	}
 	
-	public Processo(Long id, String nome, Boolean statusProcesso, Instant dataProcesso, Sistema sistema, Acesso acesso) {
+	public Processo(Long id, String nome, Boolean statusMonitoracao, Boolean statusProcesso, Instant dataProcesso, Sistema sistema, Acesso acesso) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.statusMonitoracao = statusMonitoracao;
 		this.statusProcesso = statusProcesso;
 		this.dataProcesso = dataProcesso;
 		this.sistema = sistema;
@@ -58,6 +60,18 @@ public class Processo implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	public Boolean getStatusMonitoracao() {
+		return statusMonitoracao;
+	}
+
+	public void setStatusMonitoracao(Boolean statusMonitoracao) {
+		this.statusMonitoracao = statusMonitoracao;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	public Boolean getStatusProcesso() {
 		return statusProcesso;
@@ -78,7 +92,15 @@ public class Processo implements Serializable{
 	public Sistema getSistema() {
 		return sistema;
 	}
-	
+
+	public void setSistema(Sistema sistema) {
+		this.sistema = sistema;
+	}
+
+	public void setAcesso(Acesso acesso) {
+		this.acesso = acesso;
+	}
+
 	public Acesso getAcesso() {
 		return acesso;
 	}

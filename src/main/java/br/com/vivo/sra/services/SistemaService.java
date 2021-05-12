@@ -42,5 +42,6 @@ public class SistemaService {
 		entity.setNome(obj.getNome());
 		entity.setdataAtualizacao(obj.getdataAtualizacao());
 		entity.setstatusSistema(obj.getstatusSistema());
+		entity.setUsuario(obj.getUsuario());
 	}
 }

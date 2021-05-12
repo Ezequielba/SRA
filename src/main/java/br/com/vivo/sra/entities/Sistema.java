@@ -76,6 +76,10 @@ public class Sistema implements Serializable{
 		this.dataAtualizacao = dataAtualizacao;
 	}
 	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}

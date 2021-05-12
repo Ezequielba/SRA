@@ -40,6 +40,7 @@ public class UsuarioService {
 
 	private void updateData(Usuario entity, Usuario obj) {
 		entity.setNome(obj.getNome());
+		entity.setsenha(obj.getsenha());
 		entity.setativo(obj.getativo());
 	}
 	
