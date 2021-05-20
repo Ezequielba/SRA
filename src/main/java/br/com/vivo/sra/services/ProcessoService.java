@@ -57,9 +57,12 @@ public class ProcessoService {
 
 	private void updateData(Processo entity, Processo obj) {
 		entity.setNome(obj.getNome());
-		entity.setDataProcesso(obj.getDataProcesso());
 		entity.setStatusMonitoracao(obj.getStatusMonitoracao());
 		entity.setStatusProcesso(obj.getStatusProcesso());
+		entity.setDataProcesso(obj.getDataProcesso());
+		//entity.setDiretorio(obj.getDiretorio());
+		//entity.setStop(obj.getStop());
+		//entity.setStart(obj.getStart());
 		entity.setAcesso(obj.getAcesso());
 		entity.setSistema(obj.getSistema());
 	}

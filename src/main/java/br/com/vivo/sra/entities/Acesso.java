@@ -21,9 +21,6 @@ public class Acesso implements Serializable{
 	private String ip;
 	private String usuario;
 	private String senha;
-	private String diretorio;
-	private String stop;
-	private String start;
 	
 	@ManyToOne
 	@JoinColumn(name = "sistema_id")
@@ -34,17 +31,13 @@ public class Acesso implements Serializable{
 	public Acesso() {
 	}
 
-	public Acesso(Long id, String hostname, String ip, String usuario, String senha, String diretorio, String stop, 
-			String start, Sistema sistema) {
+	public Acesso(Long id, String hostname, String ip, String usuario, String senha, Sistema sistema) {
 		super();
 		this.id = id;
 		this.hostname = hostname;
 		this.ip = ip;
 		this.usuario = usuario;
 		this.senha = senha;
-		this.diretorio = diretorio;
-		this.stop = stop;
-		this.start = start;
 		this.sistema = sistema;
 	}
 
@@ -86,30 +79,6 @@ public class Acesso implements Serializable{
 
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-
-	public String getDiretorio() {
-		return diretorio;
-	}
-
-	public void setDiretorio(String diretorio) {
-		this.diretorio = diretorio;
-	}
-
-	public String getStop() {
-		return stop;
-	}
-
-	public void setStop(String stop) {
-		this.stop = stop;
-	}
-
-	public String getStart() {
-		return start;
-	}
-
-	public void setStart(String start) {
-		this.start = start;
 	}
 
 	public Sistema getSistema() {

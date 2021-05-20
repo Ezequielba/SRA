@@ -22,6 +22,13 @@ public class Processo implements Serializable{
 	private Boolean statusMonitoracao;
 	private Boolean statusProcesso;
 	private Instant dataProcesso;
+	private String diretorio;
+	private String stop;
+	private String start;
+	private String observacao;
+	private Instant dataTentativa01;
+	private Instant dataTentativa02;
+	private Instant dataTentativa03;
 	
 	@ManyToOne
 	@JoinColumn(name = "sistema_id", referencedColumnName="id")
@@ -34,13 +41,36 @@ public class Processo implements Serializable{
 	public Processo() {
 	}
 	
-	public Processo(Long id, String nome, Boolean statusMonitoracao, Boolean statusProcesso, Instant dataProcesso, Sistema sistema, Acesso acesso) {
+	public Processo(Long id, String nome, Boolean statusMonitoracao, Boolean statusProcesso, Instant dataProcesso, String diretorio, String stop, 
+			String start, Sistema sistema, Acesso acesso) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.statusMonitoracao = statusMonitoracao;
 		this.statusProcesso = statusProcesso;
 		this.dataProcesso = dataProcesso;
+		this.diretorio = diretorio;
+		this.stop = stop;
+		this.start = start;
+		this.sistema = sistema;
+		this.acesso = acesso;
+	}	
+	
+	public Processo(Long id, String nome, Boolean statusMonitoracao, Boolean statusProcesso, Instant dataProcesso, String diretorio, String stop, 
+			String start, String observacao, Instant dataTentativa01, Instant dataTentativa02, Instant dataTentativa03, Sistema sistema, Acesso acesso) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.statusMonitoracao = statusMonitoracao;
+		this.statusProcesso = statusProcesso;
+		this.dataProcesso = dataProcesso;
+		this.diretorio = diretorio;
+		this.stop = stop;
+		this.start = start;
+		this.observacao = observacao;
+		this.dataTentativa01 = dataTentativa01;
+		this.dataTentativa02 = dataTentativa02;
+		this.dataTentativa03 = dataTentativa03;
 		this.sistema = sistema;
 		this.acesso = acesso;
 	}
@@ -87,6 +117,62 @@ public class Processo implements Serializable{
 
 	public void setDataProcesso(Instant dataProcesso) {
 		this.dataProcesso = dataProcesso;
+	}
+	
+	public String getDiretorio() {
+		return diretorio;
+	}
+
+	public void setDiretorio(String diretorio) {
+		this.diretorio = diretorio;
+	}
+
+	public String getStop() {
+		return stop;
+	}
+
+	public void setStop(String stop) {
+		this.stop = stop;
+	}
+
+	public String getStart() {
+		return start;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	public Instant getDataTentativa01() {
+		return dataTentativa01;
+	}
+
+	public void setDataTentativa01(Instant dataTentativa01) {
+		this.dataTentativa01 = dataTentativa01;
+	}
+
+	public Instant getDataTentativa02() {
+		return dataTentativa02;
+	}
+
+	public void setDataTentativa02(Instant dataTentativa02) {
+		this.dataTentativa02 = dataTentativa02;
+	}
+
+	public Instant getDataTentativa03() {
+		return dataTentativa03;
+	}
+
+	public void setDataTentativa03(Instant dataTentativa03) {
+		this.dataTentativa03 = dataTentativa03;
+	}
+
+	public void setStart(String start) {
+		this.start = start;
 	}
 
 	public Sistema getSistema() {

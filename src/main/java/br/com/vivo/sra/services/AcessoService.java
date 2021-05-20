@@ -43,8 +43,5 @@ public class AcessoService {
 		entity.setIp(obj.getIp());
 		entity.setUsuario(obj.getUsuario());
 		entity.setSenha(obj.getSenha());
-		entity.setDiretorio(obj.getDiretorio());
-		entity.setStop(obj.getStop());
-		entity.setStart(obj.getStart());
 	}
 }
