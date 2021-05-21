@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.vivo.sra.entities.Acesso;
 import br.com.vivo.sra.services.AcessoService;
+import br.com.vivo.sra.services.EngineService;
 
 //@CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -47,6 +48,13 @@ public class AcessoResource {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
+	}
+	
+	@CrossOrigin
+	@PostMapping(value="/conexao")
+	public Boolean conexao(@RequestBody Acesso obj){
+		EngineService engineService = new EngineService();
+		return engineService.listenEngine(obj.getUsuario(), obj.getSenha(), obj.getIp());
 	}
 	
 	@CrossOrigin

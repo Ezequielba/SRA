@@ -32,6 +32,13 @@ public class AcessoService {
 		repository.deleteById(id);
 	}
 	
+	public Boolean conexao(String ip, String usuario, String senha) {
+		
+		EngineService engineService = new EngineService();
+		
+		return engineService.listenEngine(usuario, senha, ip);
+	}
+	
 	public Acesso update(Long id, Acesso obj) {
 		Acesso entity = repository.getOne(id);
 		updateData(entity, obj);
@@ -43,5 +50,6 @@ public class AcessoService {
 		entity.setIp(obj.getIp());
 		entity.setUsuario(obj.getUsuario());
 		entity.setSenha(obj.getSenha());
+		entity.setSistema(obj.getSistema());
 	}
 }

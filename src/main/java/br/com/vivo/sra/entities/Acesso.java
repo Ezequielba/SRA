@@ -81,6 +81,10 @@ public class Acesso implements Serializable{
 		this.senha = senha;
 	}
 
+	public void setSistema(Sistema sistema) {
+		this.sistema = sistema;
+	}
+
 	public Sistema getSistema() {
 		return sistema;
 	}

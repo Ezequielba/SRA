@@ -65,4 +65,22 @@ public class EngineService {
 	    }
 	}
 	
+	
+	public Boolean listenEngine(String usuario, String senha, String ip) {
+
+		try{
+	        JSch jsch = new JSch();
+
+	        Session session = jsch.getSession(usuario, ip, 22);
+	        session.setPassword(senha);
+	        session.setConfig("StrictHostKeyChecking", "no");
+	        session.connect();
+	        return true;
+	    }catch(Exception e){
+	    	e.printStackTrace();
+	    	System.out.println(e.getMessage());
+	    	return false;
+	    }
+	}
+	
 }

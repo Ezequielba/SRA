@@ -54,7 +54,7 @@ public class TestConfig implements CommandLineRunner {
 		Sistema s3 = new Sistema(null, "SND", true, Instant.parse("2020-08-18T18:00:00Z"), u1);
 		Sistema s4 = new Sistema(null, "OSP", true, Instant.parse("2020-08-18T18:00:00Z"), u1);
 		
-		Acesso a1 = new Acesso(null, "brtlvlts2695sl", "20.240.62.130", "scqla", "vivo@2016", s1);
+		Acesso a1 = new Acesso(null, "brtlvlts2695sl", "10.240.62.130", "scqla", "vivo@2016", s1);
 		Acesso a2 = new Acesso(null, "SOCBK", "10.20.142.62", "eoc", "vivo@eoc", s2);
 		Acesso a3 = new Acesso(null, "BRTLVBGS0192SL", "10.240.3.165", "Rede", "Rede", s2);
 		Acesso a4 = new Acesso(null, "BRTLVBGS0035SL", "10.238.60.117", "Rede", "Rede", s4);
@@ -75,6 +75,13 @@ public class TestConfig implements CommandLineRunner {
 		processoRepository.saveAll(Arrays.asList(p5));
 		
 		EngineService engineService = new EngineService();	
+		
+		if(engineService.listenEngine(a1.getUsuario(), a1.getSenha(), a1.getIp())) {
+			System.out.println("Conectou com sucesso!");
+		}else {
+			System.out.println("Falha para conectar!");
+		}
+		
 			
 		while(true) {
 		System.out.println("");
@@ -82,16 +89,16 @@ public class TestConfig implements CommandLineRunner {
 		Thread.sleep(5000);
 		List<Processo> listProcesso = processoRepository.findAll();
 		System.out.println("Verificando o campo de monitoração!!!");
+		
 		for(Processo processo: listProcesso) {
-			if (!processo.getStatusMonitoracao() && processo.getStatusProcesso()) {
-				Acesso acesso = processo.getAcesso();
-				Sistema sistema = processo.getSistema();
+			Acesso acesso = processo.getAcesso();
+			Sistema sistema = processo.getSistema();
+			if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema()) {
 				String returnEngine = engineService.listenEngine(acesso.getUsuario(), acesso.getSenha(), acesso.getIp(), processo.getDiretorio(), processo.getStart());
 				processo.setStatusMonitoracao(true);
 				processoRepository.save(processo);
 				System.out.println("Efetuado restart no processo: " + processo.getNome());
 				System.out.println(s1.getNome() + p1.getNome() + Instant.parse("2020-08-18T18:00:00Z") + a1.getHostname());
-				
 				if(returnEngine.isEmpty() || returnEngine == "") {
 					Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO", Instant.now());
 					logRepository.saveAll(Arrays.asList(l1));
