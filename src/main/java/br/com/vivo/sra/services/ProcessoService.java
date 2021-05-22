@@ -60,9 +60,9 @@ public class ProcessoService {
 		entity.setStatusMonitoracao(obj.getStatusMonitoracao());
 		entity.setStatusProcesso(obj.getStatusProcesso());
 		entity.setDataProcesso(obj.getDataProcesso());
-		//entity.setDiretorio(obj.getDiretorio());
-		//entity.setStop(obj.getStop());
-		//entity.setStart(obj.getStart());
+		entity.setDiretorio(obj.getDiretorio());
+		entity.setStop(obj.getStop());
+		entity.setStart(obj.getStart());
 		entity.setAcesso(obj.getAcesso());
 		entity.setSistema(obj.getSistema());
 	}
