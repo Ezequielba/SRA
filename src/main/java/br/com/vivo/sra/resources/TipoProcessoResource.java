@@ -16,43 +16,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.vivo.sra.entities.Processo;
-import br.com.vivo.sra.services.ProcessoService;
+import br.com.vivo.sra.entities.TipoProcesso;
+import br.com.vivo.sra.services.TipoProcessoService;
 
 //@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping(value = "/processos")
-public class ProcessoResource {
-	
+@RequestMapping(value = "/tipoprocessos")
+public class TipoProcessoResource {
+
 	@Autowired
-	private ProcessoService service;
+	private TipoProcessoService service;
 	
 	@CrossOrigin
 	@GetMapping
-	public ResponseEntity<List<Processo>> findAll() {
-		List<Processo> list = service.findAll();
-		return ResponseEntity.ok().body(list);
-	}
-	
-	@CrossOrigin
-	@GetMapping(value="/sistema/{id}")
-	public ResponseEntity<List<Processo>> findBySistemaID(@PathVariable Long id){
-		System.out.println(id);
-		List<Processo> list = service.findBySistemaID(id);
-		System.out.println(list);
+	public ResponseEntity<List<TipoProcesso>> findAll() {
+		List<TipoProcesso> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@CrossOrigin
 	@GetMapping(value="/{id}")
-	public ResponseEntity<Processo> findById(@PathVariable Long id){
-		Processo obj = service.findById(id);
+	public ResponseEntity<TipoProcesso> findById(@PathVariable Long id){
+		TipoProcesso obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@CrossOrigin
 	@PostMapping
-	public ResponseEntity<Processo> insert(@RequestBody Processo obj){
+	public ResponseEntity<TipoProcesso> insert(@RequestBody TipoProcesso obj){
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
@@ -67,9 +58,8 @@ public class ProcessoResource {
 	
 	@CrossOrigin
 	@PutMapping(value="/{id}")
-	public ResponseEntity<Processo> update(@PathVariable Long id, @RequestBody Processo obj){
+	public ResponseEntity<TipoProcesso> update(@PathVariable Long id, @RequestBody TipoProcesso obj){
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
-	
 }

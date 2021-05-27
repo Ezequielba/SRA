@@ -9,7 +9,6 @@ import javax.persistence.Query;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.com.vivo.sra.entities.Processo;
@@ -31,6 +30,7 @@ public class ProcessoService {
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	public List<Processo> findBySistemaID(Long sistemaID){
 		Query query = entityManager.createQuery("SELECT p FROM Processo p Where SISTEMA_ID ="+sistemaID);
 		return query.getResultList();
@@ -61,8 +61,10 @@ public class ProcessoService {
 		entity.setStatusProcesso(obj.getStatusProcesso());
 		entity.setDataProcesso(obj.getDataProcesso());
 		entity.setDiretorio(obj.getDiretorio());
+		entity.setTipoProcesso(obj.getTipoProcesso());
 		entity.setStop(obj.getStop());
 		entity.setStart(obj.getStart());
+		entity.setTipoProcesso(obj.getTipoProcesso());
 		entity.setAcesso(obj.getAcesso());
 		entity.setSistema(obj.getSistema());
 	}

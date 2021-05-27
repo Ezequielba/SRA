@@ -31,6 +31,10 @@ public class Processo implements Serializable{
 	private Instant dataTentativa03;
 	
 	@ManyToOne
+	@JoinColumn(name = "tipoProcesso_id", referencedColumnName="id")
+	private TipoProcesso tipoProcesso;
+	
+	@ManyToOne
 	@JoinColumn(name = "sistema_id", referencedColumnName="id")
 	private Sistema sistema;
 	
@@ -42,7 +46,7 @@ public class Processo implements Serializable{
 	}
 	
 	public Processo(Long id, String nome, Boolean statusMonitoracao, Boolean statusProcesso, Instant dataProcesso, String diretorio, String stop, 
-			String start, Sistema sistema, Acesso acesso) {
+			String start, TipoProcesso tipoProcesso, Sistema sistema, Acesso acesso) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -52,10 +56,11 @@ public class Processo implements Serializable{
 		this.diretorio = diretorio;
 		this.stop = stop;
 		this.start = start;
+		this.tipoProcesso = tipoProcesso;
 		this.sistema = sistema;
 		this.acesso = acesso;
 	}	
-	
+	/*
 	public Processo(Long id, String nome, Boolean statusMonitoracao, Boolean statusProcesso, Instant dataProcesso, String diretorio, String stop, 
 			String start, String observacao, Instant dataTentativa01, Instant dataTentativa02, Instant dataTentativa03, Sistema sistema, Acesso acesso) {
 		super();
@@ -73,7 +78,7 @@ public class Processo implements Serializable{
 		this.dataTentativa03 = dataTentativa03;
 		this.sistema = sistema;
 		this.acesso = acesso;
-	}
+	}*/
 
 	public Long getId() {
 		return id;
@@ -126,7 +131,7 @@ public class Processo implements Serializable{
 	public void setDiretorio(String diretorio) {
 		this.diretorio = diretorio;
 	}
-
+	
 	public String getStop() {
 		return stop;
 	}
@@ -169,6 +174,14 @@ public class Processo implements Serializable{
 
 	public void setDataTentativa03(Instant dataTentativa03) {
 		this.dataTentativa03 = dataTentativa03;
+	}
+
+	public TipoProcesso getTipoProcesso() {
+		return tipoProcesso;
+	}
+
+	public void setTipoProcesso(TipoProcesso tipoProcesso) {
+		this.tipoProcesso = tipoProcesso;
 	}
 
 	public void setStart(String start) {
