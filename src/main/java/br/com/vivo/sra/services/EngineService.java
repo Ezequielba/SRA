@@ -28,17 +28,13 @@ public class EngineService {
 	        
 	        InputStream in=channel.getInputStream();
 	        channel.connect();
-	        System.out.println("Teste -2");
 	        byte[] tmp=new byte[1024];
 	        while(true){
-	        	System.out.println("Teste -1");
 	          while(in.available()>0){
-	        	  System.out.println("Teste -3");
 	            int i=in.read(tmp, 0, 1024);
 	            
 	            if(i<0)break;
 	            System.out.print(new String(tmp, 0, i));
-	            System.out.println("Teste 0");
 	          }
 	          
 	          if(channel.isClosed()){
@@ -49,18 +45,13 @@ public class EngineService {
 	          try{Thread.sleep(1000);}catch(Exception ee){}
 	          channel.disconnect();
 		      session.disconnect();
-		      System.out.println("Caindo no try 01");
 	        }
-	        //channel.disconnect();
-	        //session.disconnect();
 	        System.out.println("");
 	        System.out.println("DONE");
-	        System.out.println("Teste 1");
 	        return "";
 	    }catch(Exception e){
 	    	e.printStackTrace();
 	    	System.out.println(e.getMessage());
-	    	System.out.println("Teste 2");
 	    	return e.getMessage();
 	    }
 	}

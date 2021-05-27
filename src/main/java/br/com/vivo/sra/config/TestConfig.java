@@ -111,13 +111,12 @@ public class TestConfig implements CommandLineRunner {
 				System.out.println("Efetuado restart no processo: " + processo.getNome());
 				System.out.println(s1.getNome() + p1.getNome() + Instant.parse("2020-08-18T18:00:00Z") + a1.getHostname());
 				if(returnEngine.isEmpty() || returnEngine == "") {
-					Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO", Instant.now());
+					Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","", Instant.now());
 					logRepository.saveAll(Arrays.asList(l1));
 				}else {
-					Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), returnEngine, Instant.now());
+					Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
 					logRepository.saveAll(Arrays.asList(l1));
-				}
-				
+				}			
 			}
 		}
 		}

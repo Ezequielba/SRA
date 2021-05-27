@@ -19,18 +19,20 @@ public class Log implements Serializable{
 	String processo;
 	String sistema;
 	String hostname;
+	String tipoLog;
 	String mensagem;
 	Instant dataRestart;
 	
 	public Log() {
 	}
 	
-	public Log(Long id, String processo, String sistema, String hostname, String mensagem, Instant dataRestart) {
+	public Log(Long id, String processo, String sistema, String hostname, String tipoLog, String mensagem, Instant dataRestart) {
 		super();
 		this.id= id;
 		this.processo = processo;
 		this.sistema = sistema;
 		this.hostname = hostname;
+		this.tipoLog = tipoLog;
 		this.mensagem = mensagem;
 		this.dataRestart = dataRestart;
 	}
@@ -65,6 +67,14 @@ public class Log implements Serializable{
 
 	public void setHostname(String hostname) {
 		this.hostname = hostname;
+	}
+	
+	public String getTipoLog() {
+		return tipoLog;
+	}
+
+	public void setTipoLog(String tipoLog) {
+		this.tipoLog = tipoLog;
 	}
 	
 	public String getMensagem() {
