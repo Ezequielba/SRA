@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import br.com.vivo.sra.entities.Log;
@@ -16,7 +17,7 @@ public class LogService {
 	private LogRepository repository;
 	
 	public List<Log> findAll(){
-		return repository.findAll();
+		return repository.findAll((Sort.by("dataRestart").descending()));
 	}
 	
 	public Log findById(Long id){

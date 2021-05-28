@@ -1,5 +1,7 @@
 package br.com.vivo.sra.services;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Scanner;
 
 import com.jcraft.jsch.*;
 
@@ -22,8 +24,7 @@ public class EngineService {
 	        ((ChannelExec)channel).setCommand("cd " + diretorio + " && " + start);        
 	        
 	        channel.setInputStream(null);
-	        
-	        // Investigar essa linha abaixo:
+
 	        ((ChannelExec)channel).setErrStream(System.err);
 	        
 	        InputStream in=channel.getInputStream();
@@ -72,6 +73,24 @@ public class EngineService {
 	    	System.out.println(e.getMessage());
 	    	return false;
 	    }
+	}
+	
+	public String listenEngineWindows() {
+		try {
+		    Process exec = Runtime.getRuntime().exec( "cmd /C dir" );
+		     
+		    InputStream in = exec.getInputStream();
+		    Scanner scan = new Scanner(in);
+		    while( scan.hasNext() ) {
+		        System.out.println( scan.nextLine() );
+		        
+		    }
+		    return "";
+		     
+		} catch (IOException e) {
+		    e.printStackTrace();
+		    return e.getMessage();
+		}
 	}
 	
 }
