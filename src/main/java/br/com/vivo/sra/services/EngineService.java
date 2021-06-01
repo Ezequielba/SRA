@@ -2,10 +2,12 @@ package br.com.vivo.sra.services;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.util.Scanner;
 
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 
 public class EngineService {
 	
@@ -44,7 +46,11 @@ public class EngineService {
 	          
 	          if(channel.isClosed()){
 	            System.out.println("exit-status: "+channel.getExitStatus());
-	            
+	            if(channel.getExitStatus() == 0) {
+	            	System.out.println("Comando executado com sucesso");
+	            }else {
+	            	return "Falha para executar o comando: " + stop + "ou" +start;
+	            }
 	            break;
 	          }
 	          try{Thread.sleep(1000);}catch(Exception ee){}
