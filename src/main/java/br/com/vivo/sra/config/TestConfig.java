@@ -1,11 +1,11 @@
 package br.com.vivo.sra.config;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -43,16 +43,15 @@ public class TestConfig implements CommandLineRunner {
 	private AcessoRepository acessoRepository;
 	
 	@Autowired
-	private LogRepository logRepository;
-
-	@Autowired
 	private TipoProcessoRepository tipoProcessoRepository;
+	
+	@Autowired
+	private LogRepository logRepository;
 	
 	@Override
 	public void run(String... args) throws Exception {
 		
-		String SO = "LINUX";
-		
+		String SO = System.getProperty("os.name").trim().toUpperCase();
 		
 		Usuario u1 = new Usuario(null, "Usuario_01", "123", true);
 		Usuario u2 = new Usuario(null, "Usuario_02", "456", false);
@@ -68,7 +67,8 @@ public class TestConfig implements CommandLineRunner {
 		Acesso a2 = new Acesso(null, "SOCBK", "10.20.142.62", "eoc", "vivo@eoc", s2);
 		Acesso a3 = new Acesso(null, "BRTLVBGS0192SL", "10.240.3.165", "Rede", "Rede", s2);
 		Acesso a4 = new Acesso(null, "BRTLVBGS0035SL", "10.238.60.117", "Rede", "Rede", s4);
-		Acesso a5 = new Acesso(null, "SERVER-DEBIAN", "192.168.0.106", "server-linux", "admin", s5);
+		Acesso a5 = new Acesso(null, "SERVER-DEBIAN", "192.168.0.112", "server-linux", "admin", s5);
+		Acesso a6 = new Acesso(null, "DEXTER-RECOVERY", "192.168.0.117", "Administrator", "Indra@01", s5);
 		
 		TipoProcesso tp1 = new TipoProcesso(null, "LINUX");
 		TipoProcesso tp2 = new TipoProcesso(null, "WINDOWS");
@@ -78,12 +78,12 @@ public class TestConfig implements CommandLineRunner {
 		Processo p3 = new Processo(null, "STAR", true, true, Instant.parse("2020-08-18T18:00:00Z"), "C:/PROCESSOS/STAR", "stop.bat", "start.bat", tp2, s3, a3);
 		Processo p4 = new Processo(null, "OSP MQ", true, true, Instant.parse("2020-08-18T18:00:00Z"), "C:/PROCESSOS/MAP-GUIDE", "stop.bat", "start.bat", tp2, s1, a1);
 		Processo p5 = new Processo(null, "MAP GUIDE", true, true, Instant.parse("2020-08-18T18:00:00Z"), "C:/PROCESSOS/MAP-GUIDE", "stop.bat", "start.bat", tp2, s4, a4);	
-		Processo p6 = new Processo(null, "SisSRA-0.0.1-SNAPSHOT", true, true, Instant.parse("2020-08-18T18:00:00Z"), "/home/publico/Jar","stop.bat", "./Start.sh", tp2, s5, a5);
-		
+		Processo p6 = new Processo(null, "SisSRA-0.0.1-SNAPSHOT", true, true, Instant.parse("2020-08-18T18:00:00Z"), "/home/publico/Jar","stop.bat", "./Start.sh", tp1, s5, a5);
+		Processo p7 = new Processo(null, "SisSRA-0.0.1-WINDOWS", true, true, Instant.parse("2020-08-18T18:00:00Z"), "C:\\Users\\ELIEL\\Desktop\\SRA-Automacao\\Jar","stop.bat", "start.bat", tp2, s5, a6);
 		
 		usuarioRepository.saveAll(Arrays.asList(u1, u2, u3));
 		sistemaRepository.saveAll(Arrays.asList(s1, s2, s3, s4, s5));
-		acessoRepository.saveAll(Arrays.asList(a1, a2, a3, a4, a5));
+		acessoRepository.saveAll(Arrays.asList(a1, a2, a3, a4, a5, a6));
 		tipoProcessoRepository.saveAll(Arrays.asList(tp1, tp2));
 		processoRepository.saveAll(Arrays.asList(p1));
 		processoRepository.saveAll(Arrays.asList(p2));
@@ -91,76 +91,84 @@ public class TestConfig implements CommandLineRunner {
 		processoRepository.saveAll(Arrays.asList(p4));
 		processoRepository.saveAll(Arrays.asList(p5));
 		processoRepository.saveAll(Arrays.asList(p6));
-		
-		EngineService engineService = new EngineService();			
-			
+		processoRepository.saveAll(Arrays.asList(p7));
+					
 		while(true) {
-		System.out.println("");
-		System.out.println("");
-		Thread.sleep(5000);
-
-		System.out.println("Verificando o campo de monitoração!!!");
-		
-		if(SO=="LINUX") {
-			List<Processo> listProcessoLinux = processoRepository.findByTipoProcesso((long) 1);
-			for(Processo processo: listProcessoLinux) {
-				Acesso acesso = processo.getAcesso();
-				Sistema sistema = processo.getSistema();
+			EngineService engineService = new EngineService();
+			System.out.println("");
+			System.out.println("");
+			System.out.println("Verificando o campo de monitoração!!!");
+			if(SO.startsWith("LINUX")) {
+				System.out.println("TIPO DE SO");
+				System.out.println(SO);
+				List<Processo> listProcessoLinux = processoRepository.findByTipoProcesso((long) 1, false);
+				for(Processo processo: listProcessoLinux) {
+					System.out.println("Nome Processo: " + processo.getNome());
+				}
 				
-				if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema()) {
-					String returnEngine = engineService.listenEngine(acesso.getUsuario(), acesso.getSenha(), acesso.getIp(), processo.getDiretorio(), processo.getStart());
-					processo.setStatusMonitoracao(true);
-					processoRepository.save(processo);
-					System.out.println("Efetuado restart no processo: " + processo.getNome());
-					System.out.println(s1.getNome() + p1.getNome() + Instant.parse("2020-08-18T18:00:00Z") + a1.getHostname());
-					if(returnEngine.isEmpty() || returnEngine == "") {
-						Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
-						logRepository.saveAll(Arrays.asList(l1));
-					}else {
-						Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
-						logRepository.saveAll(Arrays.asList(l1));
-					}			
+				for(Processo processo: listProcessoLinux) {
+					Acesso acesso = processo.getAcesso();
+					Sistema sistema = processo.getSistema();
+					
+					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema()) {
+						String returnEngine = engineService.listenEngine(acesso.getUsuario(), acesso.getSenha(), acesso.getIp(), processo.getDiretorio(), processo.getStart(), processo.getStop());
+						processo.setStatusMonitoracao(true);
+						processoRepository.save(processo);
+						System.out.println("Efetuado restart no processo: " + processo.getNome());
+						if(returnEngine.isEmpty() || returnEngine == "") {
+							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
+							logRepository.saveAll(Arrays.asList(l1));
+						}else {
+							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
+							logRepository.saveAll(Arrays.asList(l1));
+						}			
+					}
+				}	
+			}else if(SO.startsWith("WINDOWS")){
+				System.out.println("TIPO DE SO");
+				System.out.println(SO);
+				
+				List<Processo> listProcessoWindows = processoRepository.findByTipoProcesso((long) 2, false);
+				
+				for(Processo processo: listProcessoWindows) {
+					System.out.println("Nome Processo: " + processo.getNome());
+				}
+				
+				String HostnameSO = "";
+				
+				try {		
+				    HostnameSO = new BufferedReader(new 
+							InputStreamReader(Runtime.getRuntime().exec( "cmd /C hostname" ).getInputStream())).readLine();
+				    System.out.println("HOSTNAME: "+HostnameSO);
+				}catch(IOException e){
+					System.out.println(e.getMessage());  
+				}
+				
+				for(Processo processo: listProcessoWindows) {
+					Acesso acesso = processo.getAcesso();
+					Sistema sistema = processo.getSistema();
+					
+					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema() && acesso.getHostname().toUpperCase().startsWith(HostnameSO.trim().toUpperCase())) {
+						String returnEngine = engineService.listenEngineWindows(processo.getDiretorio(), processo.getStart(), processo.getStop());
+						processo.setStatusMonitoracao(true);
+						processoRepository.save(processo);
+						System.out.println("Efetuado restart no processo: " + processo.getNome());
+						if(returnEngine.isEmpty() || returnEngine == "") {
+							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
+							logRepository.saveAll(Arrays.asList(l1));
+						}else {
+							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
+							logRepository.saveAll(Arrays.asList(l1));
+						}			
+					}
 				}
 			}
-			
-		}else {
-			
-			List<Processo> listProcessoWindows = processoRepository.findByTipoProcesso((long) 2);
-
-			for(Processo processo: listProcessoWindows) {
-				Acesso acesso = processo.getAcesso();
-				Sistema sistema = processo.getSistema();
-				
-				Process exec = Runtime.getRuntime().exec( "cmd /C hostname" );
-			     
-			    InputStream in = exec.getInputStream();
-			    Scanner scan = new Scanner(in);
-			    while( scan.hasNext() ) {
-			        System.out.println( scan.nextLine() );
-			        
-			    }
-				
-				if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema()) {
-					String returnEngine = engineService.listenEngineWindows();
-					processo.setStatusMonitoracao(true);
-					processoRepository.save(processo);
-					System.out.println("Efetuado restart no processo: " + processo.getNome());
-					System.out.println(s1.getNome() + p1.getNome() + Instant.parse("2020-08-18T18:00:00Z") + a1.getHostname());
-					if(returnEngine.isEmpty() || returnEngine == "") {
-						Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
-						logRepository.saveAll(Arrays.asList(l1));
-					}else {
-						Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
-						logRepository.saveAll(Arrays.asList(l1));
-					}			
-				}
+			else {
+				System.out.println("SISTEMA OPERACIONAL NÂO MAPEADO");
+				System.out.println(SO);
 			}
 			
-			
-			
-		}
-
-		}
-		
+			Thread.sleep(5000);
+		}	
 	}
 }
