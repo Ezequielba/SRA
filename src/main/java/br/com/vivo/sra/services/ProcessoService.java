@@ -65,6 +65,7 @@ public class ProcessoService {
 		entity.setStop(obj.getStop());
 		entity.setStart(obj.getStart());
 		entity.setTipoProcesso(obj.getTipoProcesso());
+		entity.setDataAgendamento(obj.getDataAgendamento());
 		entity.setAcesso(obj.getAcesso());
 		entity.setSistema(obj.getSistema());
 	}

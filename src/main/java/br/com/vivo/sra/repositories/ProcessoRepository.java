@@ -12,10 +12,9 @@ import br.com.vivo.sra.entities.Processo;
 
 @Transactional
 public interface ProcessoRepository extends JpaRepository<Processo, Long>{
-	@Query(value = "SELECT * FROM PROCESSO WHERE TIPO_PROCESSO_ID = :tipoProcessoId AND STATUS_MONITORACAO = :statusMonitoracao",
+	@Query(value = "SELECT * FROM PROCESSO WHERE TIPO_PROCESSO_ID = :tipoProcessoId AND STATUS_MONITORACAO = :statusMonitoracao OR DATA_AGENDAMENTO <> ''",
     nativeQuery = true)
 	List <Processo> findByTipoProcesso(
 			@Param("tipoProcessoId") Long id,
 			@Param("statusMonitoracao") Boolean statusMonitoracao);
-	
 }

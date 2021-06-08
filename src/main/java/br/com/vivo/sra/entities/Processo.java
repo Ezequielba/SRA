@@ -26,6 +26,7 @@ public class Processo implements Serializable{
 	private String stop;
 	private String start;
 	private String observacao;
+	private String dataAgendamento;
 	private Instant dataTentativa01;
 	private Instant dataTentativa02;
 	private Instant dataTentativa03;
@@ -190,6 +191,14 @@ public class Processo implements Serializable{
 
 	public Sistema getSistema() {
 		return sistema;
+	}
+
+	public String getDataAgendamento() {
+		return dataAgendamento;
+	}
+
+	public void setDataAgendamento(String dataAgendamento) {
+		this.dataAgendamento = dataAgendamento;
 	}
 
 	public void setSistema(Sistema sistema) {

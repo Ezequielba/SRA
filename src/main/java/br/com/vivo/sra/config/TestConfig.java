@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.Instant;
+import java.time.LocalTime;
+import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +51,7 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private LogRepository logRepository;
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run(String... args) throws Exception {
 		
@@ -98,6 +102,11 @@ public class TestConfig implements CommandLineRunner {
 			System.out.println("");
 			System.out.println("");
 			System.out.println("Verificando o campo de monitoração!!!");
+			
+			Date dt = new Date();
+			System.out.println("Hora atual: " + dt.getHours() + ":" + dt.getMinutes());
+			String horaAtual = dt.getHours()+":"+dt.getMinutes();
+			
 			if(SO.startsWith("LINUX")) {
 				System.out.println("TIPO DE SO");
 				System.out.println(SO);
@@ -109,6 +118,9 @@ public class TestConfig implements CommandLineRunner {
 				for(Processo processo: listProcessoLinux) {
 					Acesso acesso = processo.getAcesso();
 					Sistema sistema = processo.getSistema();
+					
+					
+					
 					
 					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema()) {
 						String returnEngine = engineService.listenEngine(acesso.getUsuario(), acesso.getSenha(), acesso.getIp(), processo.getDiretorio(), processo.getStart(), processo.getStop());
@@ -148,7 +160,11 @@ public class TestConfig implements CommandLineRunner {
 					Acesso acesso = processo.getAcesso();
 					Sistema sistema = processo.getSistema();
 					
-					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema() && acesso.getHostname().toUpperCase().startsWith(HostnameSO.trim().toUpperCase())) {
+					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && 
+							sistema.getstatusSistema() && 
+							acesso.getHostname().toUpperCase().startsWith(HostnameSO.trim().toUpperCase()) || 
+							horaAtual.equals(processo.getDataAgendamento()) && 
+							acesso.getHostname().toUpperCase().startsWith(HostnameSO.trim().toUpperCase()) ) {
 						String returnEngine = engineService.listenEngineWindows(processo.getDiretorio(), processo.getStart(), processo.getStop());
 						processo.setStatusMonitoracao(true);
 						processoRepository.save(processo);
