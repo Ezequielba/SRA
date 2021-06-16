@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.Instant;
-import java.time.LocalTime;
-import java.time.temporal.TemporalUnit;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +27,7 @@ import br.com.vivo.sra.repositories.SistemaRepository;
 import br.com.vivo.sra.repositories.TipoProcessoRepository;
 import br.com.vivo.sra.repositories.UsuarioRepository;
 import br.com.vivo.sra.services.EngineService;
+import br.com.vivo.sra.util.CalculaTempo;
 
 @Configuration
 @Profile("test")
@@ -98,84 +98,159 @@ public class TestConfig implements CommandLineRunner {
 		processoRepository.saveAll(Arrays.asList(p7));
 					
 		while(true) {
+			Boolean efetuarRestart = false;
 			EngineService engineService = new EngineService();
+			Date dt = new Date();
+			
 			System.out.println("");
 			System.out.println("");
 			System.out.println("Verificando o campo de monitoração!!!");
 			
-			Date dt = new Date();
-			System.out.println("Hora atual: " + dt.getHours() + ":" + dt.getMinutes());
-			String horaAtual = dt.getHours()+":"+dt.getMinutes();
+			
+			String hora = ""+dt.getHours();
+			String minuto = ""+dt.getMinutes();
+			String horaAtual = (hora.length() < 2 ? "0" + hora : hora) + ":" + (minuto.length() < 2 ? "0" + minuto : minuto);
+			horaAtual = horaAtual.trim();
+			//System.out.println("Hora atual: " + horaAtual);
 			
 			if(SO.startsWith("LINUX")) {
-				System.out.println("TIPO DE SO");
-				System.out.println(SO);
-				List<Processo> listProcessoLinux = processoRepository.findByTipoProcesso((long) 1, false);
+				
+				System.out.println("TIPO DE SO: "+ SO);
+				List<Processo> listProcessoLinux = processoRepository.findByTipoProcesso((long) 1, false, horaAtual);
+				
+				//Remover este for antes de subir para produção
 				for(Processo processo: listProcessoLinux) {
 					System.out.println("Nome Processo: " + processo.getNome());
 				}
 				
 				for(Processo processo: listProcessoLinux) {
+					efetuarRestart = false;
 					Acesso acesso = processo.getAcesso();
 					Sistema sistema = processo.getSistema();
-					
-					
-					
-					
-					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema()) {
-						String returnEngine = engineService.listenEngine(acesso.getUsuario(), acesso.getSenha(), acesso.getIp(), processo.getDiretorio(), processo.getStart(), processo.getStop());
-						processo.setStatusMonitoracao(true);
-						processoRepository.save(processo);
-						System.out.println("Efetuado restart no processo: " + processo.getNome());
-						if(returnEngine.isEmpty() || returnEngine == "") {
-							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
-							logRepository.saveAll(Arrays.asList(l1));
-						}else {
-							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
-							logRepository.saveAll(Arrays.asList(l1));
-						}			
+
+					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() 
+							&& sistema.getstatusSistema() || horaAtual.equals(processo.getDataAgendamento())) {
+						
+						// Logica Tentativa de Restart
+						int retornoDiferenca = CalculaTempo.Diferenca(processo.getDataTentativa01() , LocalDateTime.now().toString());
+						
+						if(retornoDiferenca < 30 && processo.getStatusProcesso() && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
+							if(processo.getDataTentativa01() == null || processo.getDataTentativa01() == "") {
+								processo.setDataTentativa01(LocalDateTime.now().toString());
+								processoRepository.save(processo);
+								efetuarRestart = true;
+							}
+							else if(retornoDiferenca > 0 && processo.getDataTentativa02() == null || processo.getDataTentativa02() == "") {
+								processo.setDataTentativa02(LocalDateTime.now().toString());
+								processoRepository.save(processo); 
+								efetuarRestart = true;
+							}
+							else if(retornoDiferenca > 0 && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
+								processo.setDataTentativa03(LocalDateTime.now().toString());
+								processoRepository.save(processo);
+								efetuarRestart = true;
+							}
+						}
+						else {
+							processo.setDataTentativa01("");
+							processo.setDataTentativa02("");
+							processo.setDataTentativa03("");
+							processo.setStatusProcesso(false);
+							processo.setObservacao("Reinicialização automatica encerrada apos 3 tentativa,Por favor verifique o processo!");
+							processoRepository.save(processo);
+							efetuarRestart = false;
+						}
+						
+						if(efetuarRestart) {
+							String returnEngine = engineService.listenEngine(acesso.getUsuario(), acesso.getSenha(), acesso.getIp(), processo.getDiretorio(), processo.getStart(), processo.getStop());
+							processo.setStatusMonitoracao(true);
+							processoRepository.save(processo);
+							System.out.println("Efetuado restart no processo: " + processo.getNome());
+							if(returnEngine.isEmpty() || returnEngine == "") {
+								Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
+								logRepository.saveAll(Arrays.asList(l1));
+							}else {
+								Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
+								logRepository.saveAll(Arrays.asList(l1));
+							}	
+						}
 					}
 				}	
 			}else if(SO.startsWith("WINDOWS")){
-				System.out.println("TIPO DE SO");
-				System.out.println(SO);
 				
-				List<Processo> listProcessoWindows = processoRepository.findByTipoProcesso((long) 2, false);
-				
-				for(Processo processo: listProcessoWindows) {
-					System.out.println("Nome Processo: " + processo.getNome());
-				}
-				
+				System.out.println("TIPO DE SO: "+ SO);
 				String HostnameSO = "";
+				List<Processo> listProcessoWindows = processoRepository.findByTipoProcesso((long) 2, false, horaAtual);
+				
+				//Remover este for antes de subir para produção
+				for(Processo processo: listProcessoWindows) {
+					System.out.println("Nome Processo: " + processo.getNome());	
+				}
 				
 				try {		
 				    HostnameSO = new BufferedReader(new 
 							InputStreamReader(Runtime.getRuntime().exec( "cmd /C hostname" ).getInputStream())).readLine();
-				    System.out.println("HOSTNAME: "+HostnameSO);
+
 				}catch(IOException e){
 					System.out.println(e.getMessage());  
 				}
 				
 				for(Processo processo: listProcessoWindows) {
+					efetuarRestart = false;
 					Acesso acesso = processo.getAcesso();
 					Sistema sistema = processo.getSistema();
 					
-					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && 
+					if (!processo.getStatusMonitoracao() &&
+							processo.getStatusProcesso() && 
 							sistema.getstatusSistema() && 
 							acesso.getHostname().toUpperCase().startsWith(HostnameSO.trim().toUpperCase()) || 
 							horaAtual.equals(processo.getDataAgendamento()) && 
 							acesso.getHostname().toUpperCase().startsWith(HostnameSO.trim().toUpperCase()) ) {
-						String returnEngine = engineService.listenEngineWindows(processo.getDiretorio(), processo.getStart(), processo.getStop());
-						processo.setStatusMonitoracao(true);
-						processoRepository.save(processo);
-						System.out.println("Efetuado restart no processo: " + processo.getNome());
-						if(returnEngine.isEmpty() || returnEngine == "") {
-							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
-							logRepository.saveAll(Arrays.asList(l1));
-						}else {
-							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
-							logRepository.saveAll(Arrays.asList(l1));
-						}			
+						
+						// Logica Tentativa de Restart
+						int retornoDiferenca = CalculaTempo.Diferenca(processo.getDataTentativa01() , LocalDateTime.now().toString());
+						
+						if(retornoDiferenca < 30 && processo.getStatusProcesso() && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
+							if(processo.getDataTentativa01() == null || processo.getDataTentativa01() == "") {
+								processo.setDataTentativa01(LocalDateTime.now().toString());
+								processoRepository.save(processo);
+								efetuarRestart = true;
+							}
+							else if(retornoDiferenca > 0 && processo.getDataTentativa02() == null || processo.getDataTentativa02() == "") {
+								processo.setDataTentativa02(LocalDateTime.now().toString());
+								processoRepository.save(processo); 
+								efetuarRestart = true;
+							}
+							else if(retornoDiferenca > 0 && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
+								processo.setDataTentativa03(LocalDateTime.now().toString());
+								processoRepository.save(processo);
+								efetuarRestart = true;
+							}
+						}
+						else {
+							processo.setDataTentativa01("");
+							processo.setDataTentativa02("");
+							processo.setDataTentativa03("");
+							processo.setStatusProcesso(false);
+							processo.setObservacao("Reinicialização automatica encerrada apos 3 tentativa,Por favor verifique o processo!");
+							processoRepository.save(processo);
+							efetuarRestart = false;
+						}
+						
+						if(efetuarRestart) {
+							String returnEngine = engineService.listenEngineWindows(processo.getDiretorio(), processo.getStart(), processo.getStop());
+							processo.setStatusMonitoracao(true);
+							processoRepository.save(processo);
+							System.out.println("Efetuado restart no processo: " + processo.getNome());
+							if(returnEngine.isEmpty() || returnEngine == "") {
+								Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
+								logRepository.saveAll(Arrays.asList(l1));
+							}else {
+								Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
+								logRepository.saveAll(Arrays.asList(l1));
+							}	
+						}
+								
 					}
 				}
 			}
@@ -183,7 +258,6 @@ public class TestConfig implements CommandLineRunner {
 				System.out.println("SISTEMA OPERACIONAL NÂO MAPEADO");
 				System.out.println(SO);
 			}
-			
 			Thread.sleep(5000);
 		}	
 	}

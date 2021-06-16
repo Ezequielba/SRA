@@ -85,14 +85,13 @@ public class EngineService {
 	    }
 	}
 	
+	@SuppressWarnings("resource")
 	public String listenEngineWindows(String Diretorio, String start, String stop) {
 	    
 		try {
 			String NavegaDiretorio = Diretorio.substring(0, 2);
 			
 		    Process exec = Runtime.getRuntime().exec( "cmd /C "+NavegaDiretorio+" && cd " + Diretorio +"&& "+ stop +"&& "+ start);
-		    //p_stdin = new BufferedWriter(new OutputStreamWriter(exec.getOutputStream()));
-		    //executeCommand("hostname");
 		    InputStream in = exec.getInputStream();
 		    Scanner scan = new Scanner(in);
 		    while( scan.hasNext() ) {
@@ -103,16 +102,6 @@ public class EngineService {
 		} catch (IOException e) {
 		    e.printStackTrace();
 		    return e.getMessage();
-		}
-	}
-	
-	private void executeCommand(String command) {
-		try {
-			p_stdin.write(command);
-			p_stdin.newLine();
-			p_stdin.flush();
-		}catch(IOException e) {
-			System.out.println(e.getMessage());
 		}
 	}
 	

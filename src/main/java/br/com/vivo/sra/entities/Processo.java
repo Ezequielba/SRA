@@ -27,9 +27,9 @@ public class Processo implements Serializable{
 	private String start;
 	private String observacao;
 	private String dataAgendamento;
-	private Instant dataTentativa01;
-	private Instant dataTentativa02;
-	private Instant dataTentativa03;
+	private String dataTentativa01;
+	private String dataTentativa02;
+	private String dataTentativa03;
 	
 	@ManyToOne
 	@JoinColumn(name = "tipoProcesso_id", referencedColumnName="id")
@@ -153,27 +153,27 @@ public class Processo implements Serializable{
 		this.observacao = observacao;
 	}
 
-	public Instant getDataTentativa01() {
+	public String getDataTentativa01() {
 		return dataTentativa01;
 	}
 
-	public void setDataTentativa01(Instant dataTentativa01) {
+	public void setDataTentativa01(String dataTentativa01) {
 		this.dataTentativa01 = dataTentativa01;
 	}
 
-	public Instant getDataTentativa02() {
+	public String getDataTentativa02() {
 		return dataTentativa02;
 	}
 
-	public void setDataTentativa02(Instant dataTentativa02) {
+	public void setDataTentativa02(String dataTentativa02) {
 		this.dataTentativa02 = dataTentativa02;
 	}
 
-	public Instant getDataTentativa03() {
+	public String getDataTentativa03() {
 		return dataTentativa03;
 	}
 
-	public void setDataTentativa03(Instant dataTentativa03) {
+	public void setDataTentativa03(String dataTentativa03) {
 		this.dataTentativa03 = dataTentativa03;
 	}
 
