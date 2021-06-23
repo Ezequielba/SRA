@@ -128,6 +128,11 @@ public class TestConfig implements CommandLineRunner {
 					Acesso acesso = processo.getAcesso();
 					Sistema sistema = processo.getSistema();
 
+					if (horaAtual.equals(processo.getDataAgendamento())) {
+						processo.setStatusMonitoracao(false);
+						Thread.sleep(60000);
+					}
+					
 					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() 
 							&& sistema.getstatusSistema() || horaAtual.equals(processo.getDataAgendamento())) {
 						
@@ -152,11 +157,14 @@ public class TestConfig implements CommandLineRunner {
 							}
 						}
 						else {
-							processo.setDataTentativa01("");
-							processo.setDataTentativa02("");
-							processo.setDataTentativa03("");
+							processo.setDataTentativa01(null);
+							processo.setDataTentativa02(null);
+							processo.setDataTentativa03(null);
 							processo.setStatusProcesso(false);
+							processo.setStatusMonitoracao(true);
 							processo.setObservacao("Reinicialização automatica encerrada apos 3 tentativa,Por favor verifique o processo!");
+							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "FALHA","Excedeu o tempo limite!", LocalDateTime.now().toString());
+							logRepository.saveAll(Arrays.asList(l1));
 							processoRepository.save(processo);
 							efetuarRestart = false;
 						}
@@ -167,10 +175,10 @@ public class TestConfig implements CommandLineRunner {
 							processoRepository.save(processo);
 							System.out.println("Efetuado restart no processo: " + processo.getNome());
 							if(returnEngine.isEmpty() || returnEngine == "") {
-								Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
+								Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", LocalDateTime.now().toString());
 								logRepository.saveAll(Arrays.asList(l1));
 							}else {
-								Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
+								Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, LocalDateTime.now().toString());
 								logRepository.saveAll(Arrays.asList(l1));
 							}	
 						}
@@ -238,11 +246,10 @@ public class TestConfig implements CommandLineRunner {
 							processo.setStatusProcesso(false);
 							processo.setStatusMonitoracao(true);
 							processo.setObservacao("Reinicialização automatica encerrada apos 3 tentativa,Por favor verifique o processo!");
-							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "FALHA","Excedeu o tempo limite!", Instant.now());
+							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "FALHA","Excedeu o tempo limite!", LocalDateTime.now().toString());
 							logRepository.saveAll(Arrays.asList(l1));
 							processoRepository.save(processo);
 							efetuarRestart = false;
-							System.out.println("DIFERENÇA: " + retornoDiferenca);
 						}
 		
 					}
@@ -253,10 +260,10 @@ public class TestConfig implements CommandLineRunner {
 						processoRepository.save(processo);
 						System.out.println("Efetuado restart no processo: " + processo.getNome());
 						if(returnEngine.isEmpty() || returnEngine == "") {
-							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", Instant.now());
+							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "SUCESSO","Efetuado Start!", LocalDateTime.now().toString());
 							logRepository.saveAll(Arrays.asList(l1));
 						}else {
-							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, Instant.now());
+							Log l1 = new Log(null, processo.getNome(), sistema.getNome(), acesso.getHostname(), "ERRO", returnEngine, LocalDateTime.now().toString());
 							logRepository.saveAll(Arrays.asList(l1));
 						}	
 					}

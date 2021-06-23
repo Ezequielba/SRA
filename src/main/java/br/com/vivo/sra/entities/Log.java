@@ -21,12 +21,12 @@ public class Log implements Serializable{
 	String hostname;
 	String tipoLog;
 	String mensagem;
-	Instant dataRestart;
+	String dataRestart;
 	
 	public Log() {
 	}
 	
-	public Log(Long id, String processo, String sistema, String hostname, String tipoLog, String mensagem, Instant dataRestart) {
+	public Log(Long id, String processo, String sistema, String hostname, String tipoLog, String mensagem, String dataRestart) {
 		super();
 		this.id= id;
 		this.processo = processo;
@@ -85,11 +85,11 @@ public class Log implements Serializable{
 		this.mensagem = mensagem;
 	}
 
-	public Instant getDataRestart() {
+	public String getDataRestart() {
 		return dataRestart;
 	}
 
-	public void setDataRestart(Instant dataRestart) {
+	public void setDataRestart(String dataRestart) {
 		this.dataRestart = dataRestart;
 	}
 	
