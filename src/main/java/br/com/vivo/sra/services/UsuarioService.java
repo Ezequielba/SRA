@@ -24,6 +24,11 @@ public class UsuarioService {
 		return obj.get();
 	}
 	
+	public Usuario findByNome(String nome){
+		Usuario obj = repository.findByNome(nome);
+		return obj;
+	}
+	
 	public Usuario insert(Usuario obj) {
 		return repository.save(obj);
 	}

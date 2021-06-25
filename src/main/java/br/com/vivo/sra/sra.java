@@ -98,7 +98,8 @@ public class sra implements CommandLineRunner{
 		processoRepository.saveAll(Arrays.asList(p5));
 		processoRepository.saveAll(Arrays.asList(p6));
 		processoRepository.saveAll(Arrays.asList(p7));
-					
+		
+		/*
 		while(true) {
 			Boolean efetuarRestart = false;
 			EngineService engineService = new EngineService();
@@ -138,7 +139,7 @@ public class sra implements CommandLineRunner{
 					if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() 
 							&& sistema.getstatusSistema() || horaAtual.equals(processo.getDataAgendamento())) {
 						
-						// Logica Tentativa de Restart
+						//Logica Tentativa de Restart
 						int retornoDiferenca = CalculaTempo.Diferenca(processo.getDataTentativa01() , LocalDateTime.now().toString());
 						
 						if(retornoDiferenca < 30 && processo.getStatusProcesso() && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
@@ -277,5 +278,6 @@ public class sra implements CommandLineRunner{
 			}
 			Thread.sleep(5000);
 		}	
+		*/
 	}		
 }
