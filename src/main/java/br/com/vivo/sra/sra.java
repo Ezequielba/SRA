@@ -58,7 +58,7 @@ public class sra implements CommandLineRunner{
 		// TODO Auto-generated method stub
 		String SO = System.getProperty("os.name").trim().toUpperCase();
 		
-		
+		/*
 		Usuario u1 = new Usuario(null, "Usuario_01", "123", true);
 		Usuario u2 = new Usuario(null, "Usuario_02", "456", false);
 		Usuario u3 = new Usuario(null, "Doctor.Dexter", "654321", false);
@@ -98,8 +98,8 @@ public class sra implements CommandLineRunner{
 		processoRepository.saveAll(Arrays.asList(p5));
 		processoRepository.saveAll(Arrays.asList(p6));
 		processoRepository.saveAll(Arrays.asList(p7));
+		*/
 		
-		/*
 		while(true) {
 			Boolean efetuarRestart = false;
 			EngineService engineService = new EngineService();
@@ -278,6 +278,6 @@ public class sra implements CommandLineRunner{
 			}
 			Thread.sleep(5000);
 		}	
-		*/
+		
 	}		
 }
