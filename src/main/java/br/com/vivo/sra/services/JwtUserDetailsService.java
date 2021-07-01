@@ -20,6 +20,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Usuario user = usuarioService.findByNome(username);
+		//Usuario u =new Usuario(null,"Teste","teste",true);
+		//usuarioService.insert(u);
 		BCryptPasswordEncoder bpe = new BCryptPasswordEncoder();
 		String encodedPw = bpe.encode(user.getsenha());
 		if (user.getNome().equals(username)) {

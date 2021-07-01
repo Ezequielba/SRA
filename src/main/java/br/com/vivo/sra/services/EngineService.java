@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
+import org.springframework.stereotype.Service;
+
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
+@Service
 public class EngineService {
 	
 	BufferedWriter p_stdin;
@@ -95,7 +98,7 @@ public class EngineService {
 		    InputStream in = exec.getInputStream();
 		    Scanner scan = new Scanner(in);
 		    while( scan.hasNext() ) {
-		        System.out.println( scan.nextLine() );   
+		        System.out.println( scan.nextLine());   
 		    }
 		    return "";
 		     

@@ -1,14 +1,13 @@
 package br.com.vivo.sra.resources;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.time.Instant;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import br.com.vivo.sra.entities.Acesso;
 import br.com.vivo.sra.entities.Log;
@@ -17,25 +16,22 @@ import br.com.vivo.sra.entities.Sistema;
 import br.com.vivo.sra.repositories.LogRepository;
 import br.com.vivo.sra.repositories.ProcessoRepository;
 import br.com.vivo.sra.services.EngineService;
+import br.com.vivo.sra.services.LogService;
+import br.com.vivo.sra.services.ProcessoService;
+import br.com.vivo.sra.util.CalculaTempo;
 
-@Component
-public class EngineResources{
+@Service
+public class EngineResources {
+	
+	@Autowired
+	private ProcessoService processoService;
 	
 	@Autowired
 	private ProcessoRepository processoRepository;
 	
-	@Autowired
-	private LogRepository logRepository;
 	
-	EngineService engineService = new EngineService();
 	
 	public EngineResources() {}
 	
-	public void EngineLinux(List<Processo> listProcessoLinux) {		
-			
-	}
-	
-	public void EngineWindows(List<Processo> listProcessoWindows) {
-		
-	}
+
 }

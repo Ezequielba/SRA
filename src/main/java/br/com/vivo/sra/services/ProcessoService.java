@@ -41,7 +41,7 @@ public class ProcessoService {
 		return obj.get();
 	}
 	
-	public Processo insert(Processo obj) {
+	public Processo insert(Processo obj) {	
 		return repository.save(obj);
 	}
 	
