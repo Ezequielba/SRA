@@ -14,7 +14,8 @@ public class CalculaTempo {
 			LocalDateTime  Dia2 = LocalDateTime.parse(horaFim);
 			
 			horas = horaMinuto2.getHour() - horaMinuto1.getHour();
-			int dia = Dia1.getDayOfMonth() - Dia2.getDayOfMonth();
+			int dia = Dia2.getDayOfMonth() - Dia1.getDayOfMonth();
+
 			if(dia > 0) {
 				minuto = -1;
 				return minuto;

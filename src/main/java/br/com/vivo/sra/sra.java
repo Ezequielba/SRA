@@ -56,7 +56,7 @@ public class sra implements CommandLineRunner{
 			System.out.println("");
 			System.out.println("");
 			System.out.println("Verificando o campo de monitoração!!!");
-			System.out.println("Data e Hora Atual: "+LocalDateTime.now().toString());
+			//System.out.println("Data e Hora Atual: "+LocalDateTime.now().toString());
 			
 			if(SO.startsWith("LINUX")) {
 
@@ -84,26 +84,25 @@ public class sra implements CommandLineRunner{
 	
 	public void EngineLinux(List<Processo> listProcessoLinux) throws InterruptedException {	
 		//Remover este for antes de subir para produção
-		for(Processo processo: listProcessoLinux) {
-			System.out.println("Nome Processo: " + processo.getNome() +" - "+ LocalDateTime.now().toString());
-		}
-		
+		/*for(Processo processo: listProcessoLinux) {
+			System.out.println("Nome Processo: " + processo.getNome() +" - "+ processo.getDataAgendamento());
+		}*/
+		System.out.println("Hora Atual: " + HoraAtual(new Date()));
 		for(Processo processo: listProcessoLinux) {
 			efetuarRestart = false;
 			Acesso acesso = processo.getAcesso();
 			Sistema sistema = processo.getSistema();
 
-			if (HoraAtual(new Date()).equals(processo.getDataAgendamento()) && sistema.getstatusSistema()) {
+			if (HoraAtual(new Date()).equals(processo.getDataAgendamento().trim()) && sistema.getstatusSistema()) {
 				processo.setStatusMonitoracao(false);
-				Thread.sleep(60000);
+				//Thread.sleep(60000);
 			}
 			
-			if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() 
-					&& sistema.getstatusSistema()) {
+			if (!processo.getStatusMonitoracao() && processo.getStatusProcesso() && sistema.getstatusSistema()) {
 				
 				//Logica Tentativa de Restart
 				int retornoDiferenca = CalculaTempo.Diferenca(processo.getDataTentativa01() , LocalDateTime.now().toString());
-				
+				System.out.println("Diferenca: " + retornoDiferenca);
 				if(retornoDiferenca < 30 && processo.getStatusProcesso() || processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
 					if(processo.getDataTentativa01() == null || processo.getDataTentativa01() == "" || retornoDiferenca == -1) {
 						processo.setDataTentativa01(LocalDateTime.now().toString());
@@ -114,12 +113,12 @@ public class sra implements CommandLineRunner{
 						processoRepository.save(processo);
 						efetuarRestart = true;
 					}
-					else if(retornoDiferenca > 0 && processo.getDataTentativa02() == null || processo.getDataTentativa02() == "") {
+					else if(retornoDiferenca != 0 && processo.getDataTentativa02() == null || processo.getDataTentativa02() == "") {
 						processo.setDataTentativa02(LocalDateTime.now().toString());
 						processoRepository.save(processo); 
 						efetuarRestart = true;
 					}
-					else if(retornoDiferenca > 0 && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
+					else if(retornoDiferenca != 0 && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
 						processo.setDataTentativa03(LocalDateTime.now().toString());
 						processoRepository.save(processo);
 						efetuarRestart = true;
@@ -159,18 +158,17 @@ public class sra implements CommandLineRunner{
 	
 	public void EngineWindows(List<Processo> listProcessoWindows, String HostnameSO) throws InterruptedException {
 		//Remover este for antes de subir para produção
-		for(Processo processo: listProcessoWindows) {
-			System.out.println("Nome Processo: " + processo.getNome());	
-		}
-		
+		/*for(Processo processo: listProcessoWindows) {
+			System.out.println("Nome Processo: " + processo.getNome()+ " - " + processo.getDataAgendamento());	
+		}*/
+		System.out.println("Hora Atual: " + HoraAtual(new Date()));
 		for(Processo processo: listProcessoWindows) {
 			efetuarRestart = false;
 			Acesso acesso = processo.getAcesso();
-			Sistema sistema = processo.getSistema();
-			
-			if (HoraAtual(new Date()).equals(processo.getDataAgendamento()) && acesso.getHostname().toUpperCase().startsWith(HostnameSO.trim().toUpperCase())) {
+			Sistema sistema = processo.getSistema();			
+			if (HoraAtual(new Date()).equals(processo.getDataAgendamento().trim()) && acesso.getHostname().toUpperCase().startsWith(HostnameSO.trim().toUpperCase())) {
 				processo.setStatusMonitoracao(false);
-				Thread.sleep(60000);
+				//Thread.sleep(60000);
 			}
 			
 			if (!processo.getStatusMonitoracao() &&
@@ -181,7 +179,7 @@ public class sra implements CommandLineRunner{
 				
 				// Logica Tentativa de Restart
 				int retornoDiferenca = CalculaTempo.Diferenca(processo.getDataTentativa01() , LocalDateTime.now().toString());
-				
+				System.out.println("Diferenca: " + retornoDiferenca);
 				if(retornoDiferenca < 30 && processo.getStatusProcesso() && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
 					if(processo.getDataTentativa01() == null || processo.getDataTentativa01() == "" || retornoDiferenca == -1) {
 						processo.setDataTentativa01(LocalDateTime.now().toString());
@@ -192,20 +190,20 @@ public class sra implements CommandLineRunner{
 						processoRepository.save(processo);
 						efetuarRestart = true;
 					}
-					else if(retornoDiferenca > 0 && processo.getDataTentativa02() == null || processo.getDataTentativa02() == "") {
+					else if(retornoDiferenca != 0 && processo.getDataTentativa02() == null || processo.getDataTentativa02() == "") {
 						processo.setDataTentativa02(LocalDateTime.now().toString());
 						processoRepository.save(processo); 
 						efetuarRestart = true;
 					}
-					else if(retornoDiferenca > 0 && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
+					else if(retornoDiferenca != 0 && processo.getDataTentativa03() == null || processo.getDataTentativa03() == "") {
 						processo.setDataTentativa03(LocalDateTime.now().toString());
 						processoRepository.save(processo);
 						efetuarRestart = true;
 					}
 				}
 				else {
-					efetuarRestart = false;
 					
+					efetuarRestart = false;
 					processo.setDataTentativa01(null);
 					processo.setDataTentativa02(null);
 					processo.setDataTentativa03(null);
